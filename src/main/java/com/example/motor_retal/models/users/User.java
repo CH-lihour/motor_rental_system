@@ -34,6 +34,8 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    private String image;
+
     @Column(nullable = false)
     private Boolean active = true;
 
