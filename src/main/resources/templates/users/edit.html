@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/sidebar :: layout(~{::section}, 'Edit User')}">
+    <section>
+        <div class="page-header">
+            <h3 class="page-title">Update User</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/users">User</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Update User</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Update User</h4>
+                    <p class="card-description"> Update user </p>
+
+                    <form class="forms-sample" th:action="@{/users/edit/{id}(id=${user.id})}" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" name="username" th:value="${formUsername != null ? formUsername : user.username}" class="form-control" id="username" placeholder="Username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" name="email" th:value="${formEmail != null ? formEmail : user.email}" class="form-control" id="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select class="form-select" style="width: 200px;" name="role" id="role" required>
+                                <option value="" style="text-align: center;" class="form-control">-- Select Role --</option>
+                                <option value="ADMIN" th:selected="${(formRole != null ? formRole.name() : user.role.name()) == 'ADMIN'}" class="form-control">Admin</option>
+                                <option value="STAFF" th:selected="${(formRole != null ? formRole.name() : user.role.name()) == 'STAFF'}" class="form-control">Staff</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Current Image</label><br>
+                            <img th:if="${user.image != null and !#strings.isEmpty(user.image)}"
+                                th:src="@{${user.image}}"
+                                alt="current image"
+                                style="max-width:120px;border-radius:8px;">
+                        </div>
+                        <div class="form-group">
+                            <label>File upload</label>
+                            <input type="file" id="imageInput" name="imageFile" class="file-upload-default" accept="image/*">
+                            <div class="input-group col-xs-12">
+                                <input type="text" id="imageName" class="form-control file-upload-info" disabled placeholder="Upload Image">
+                                <span class="input-group-append">
+                                    <button class="file-upload-browse btn btn-gradient-primary py-3" type="button">Upload</button>
+                                </span>
+                            </div>
+                            <div class="mt-3">
+                                <img id="imagePreview" th:if="${user.image != null and !#strings.isEmpty(user.image)}"
+                                    th:src="@{${user.image}}"
+                                    alt="Preview" style="display:none;max-width:180px;border-radius:8px;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" th:checked="${formActive != null ? formActive : user.active}" name="active" class="form-check-input" id="active">
+                            <label class="form-check-label" for="active">Active</label>
+                        </div>
+                        <button type="submit" class="btn btn-gradient-primary me-2">Update</button>
+                        <a href="/users" class="btn btn-light">Cancel</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+        <script>
+            window.addEventListener('load', function () {
+                if (!window.jQuery) {
+                    console.error('jQuery is not loaded');
+                    return;
+                }
+
+                $(document).on('click', '.file-upload-browse', function () {
+                    $('#imageInput').trigger('click');
+                });
+
+                $(document).on('change', '#imageInput', function () {
+                    const file = this.files && this.files[0];
+                if (!file) return;
+
+                $('#imageName').val(file.name);
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imagePreview').attr('src', e.target.result).show();
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        </script>
+    </section>
+</html>
+

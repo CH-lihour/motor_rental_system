@@ -26,9 +26,6 @@ public class Employee {
     @Column(length = 20)
     private String phone;
 
-    @Column(length = 100)
-    private String email;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Position position;

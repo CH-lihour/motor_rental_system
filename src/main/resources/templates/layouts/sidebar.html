@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, pageTitle)">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(content, pageTitle)">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -35,7 +37,7 @@
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="mdi mdi-menu"></span>
           </button>
-          <div class="search-field d-none d-md-block">
+          <!-- <div class="search-field d-none d-md-block">
             <form class="d-flex align-items-center h-100" action="#">
               <div class="input-group">
                 <div class="input-group-prepend bg-transparent">
@@ -44,16 +46,16 @@
                 <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
               </div>
             </form>
-          </div>
+          </div> -->
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
-                  <img src="assets/images/faces/face1.jpg" alt="image">
+                  <img th:src="${currentUser != null and currentUser.image != null} ? @{${currentUser.image}} : @{/assets/images/faces/default.png}" alt="image">
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">David Greymaax</p>
+                  <p class="mb-1 text-black" th:text="${#strings.capitalize(#authentication.name)}">USERNAME</p>
                 </div>
               </a>
 
@@ -187,13 +189,16 @@
             <li class="nav-item nav-profile">
               <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                  <img src="assets/images/faces/face1.jpg" alt="profile" />
+                  <img th:if="${currentUser != null and currentUser.image != null and !#strings.isEmpty(currentUser.image)}"
+                    th:src="@{${currentUser.image}}"
+                    alt="image">
                   <span class="login-status online"></span>
                   <!--change to offline or busy as needed-->
                 </div>
                 <div class="nav-profile-text d-flex flex-column">
-                  <span class="font-weight-bold mb-2">David Grey. H</span>
-                  <span class="text-secondary text-small">Project Manager</span>
+                  <span class="font-weight-bold mb-2" th:text="${#strings.capitalize(#authentication.name)}">USERNAME</span>
+                  <span class="text-secondary text-small" sec:authorize="hasRole('ADMIN')">ADMIN</span>
+                  <span class="text-secondary text-small" sec:authorize="hasRole('STAFF')">STAFF</span>
                 </div>
                 <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
               </a>
@@ -206,21 +211,21 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                <span class="menu-title">Basic UI Elements</span>
+                <span class="menu-title">User</span>
                 <i class="menu-arrow"></i>
-                <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                <i class="mdi mdi-account-circle menu-icon"></i>
               </a>
               <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a>
+                    <a class="nav-link" href="/users">List User</a>
                   </li>
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="pages/ui-features/typography.html">Typography</a>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
             </li>
@@ -313,6 +318,7 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
+            <th:block th:replace="~{components/flash-message :: flashMessages}"></th:block>
             <th:block th:replace="${content}">
               <!-- <div class="page-header">
                 <h3 class="page-title">
@@ -467,7 +473,7 @@
           <!-- partial:partials/_footer.html -->
           <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2026 <a href="https://github.com/CH-lihour?tab=overview&from=2026-03-01&to=2026-03-02" target="_blank">Group 9</a>. All rights reserved.</span>
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2026 <a href="https://github.com/CH-lihour?tab=overview&from=2026-03-01&to=2026-03-02" target="_blank">Fun Trip</a>. All rights reserved.</span>
               <!-- <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span> -->
             </div>
           </footer>

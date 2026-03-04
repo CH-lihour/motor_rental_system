@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="flashMessages">
+    <style>
+        .flash-messages-container {
+            position: fixed;
+            top: 88px;
+            right: 20px;
+            z-index: 2000;
+            width: min(420px, calc(100vw - 40px));
+        }
+
+        .flash-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+            animation: flashSlideIn 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flash-message.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .flash-message.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .flash-message.info {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .flash-message.warning {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .flash-message.removing {
+            animation: flashSlideOut 0.25s ease-in forwards;
+        }
+
+        .flash-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flash-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .flash-message.success .flash-icon {
+            color: #10b981;
+        }
+
+        .flash-message.error .flash-icon {
+            color: #ef4444;
+        }
+
+        .flash-message.info .flash-icon {
+            color: #3b82f6;
+        }
+
+        .flash-message.warning .flash-icon {
+            color: #f59e0b;
+        }
+
+        .flash-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .flash-title {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .flash-description {
+            font-size: 13px;
+            line-height: 1.45;
+            color: #4b5563;
+            word-break: break-word;
+        }
+
+        .flash-close {
+            border: 0;
+            background: transparent;
+            color: #9ca3af;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .flash-close:hover {
+            color: #374151;
+        }
+
+        .flash-progress {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 3px;
+            width: 100%;
+            opacity: 0.55;
+            animation: flashProgress linear forwards;
+        }
+
+        .flash-message.success .flash-progress {
+            background: #10b981;
+        }
+
+        .flash-message.error .flash-progress {
+            background: #ef4444;
+        }
+
+        .flash-message.info .flash-progress {
+            background: #3b82f6;
+        }
+
+        .flash-message.warning .flash-progress {
+            background: #f59e0b;
+        }
+
+        @keyframes flashSlideIn {
+            from {
+                transform: translateX(360px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes flashSlideOut {
+            to {
+                transform: translateX(360px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flashProgress {
+            from {
+                width: 100%;
+            }
+            to {
+                width: 0%;
+            }
+        }
+
+        @media (max-width: 991px) {
+            .flash-messages-container {
+                top: 70px;
+            }
+        }
+    </style>
+
+    <div id="flashContainer" class="flash-messages-container"></div>
+
+    <script th:inline="javascript">
+        (() => {
+            const container = document.getElementById("flashContainer");
+            if (!container) {
+                return;
+            }
+
+            const flashData = [
+                { type: "success", text: /*[[${successMessage}]]*/ null },
+                { type: "error", text: /*[[${errorMessage}]]*/ null },
+                { type: "warning", text: /*[[${warningMessage}]]*/ null },
+                { type: "info", text: /*[[${infoMessage}]]*/ null }
+            ].filter(item => item.text && String(item.text).trim().length > 0);
+
+            const iconMap = {
+                success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+                error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+                warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3.05h16.94a2 2 0 0 0 1.71-3.05L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+                info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
+            };
+
+            const titleMap = {
+                success: "Success",
+                error: "Error",
+                warning: "Warning",
+                info: "Info"
+            };
+
+            function removeFlash(el) {
+                if (!el) {
+                    return;
+                }
+                if (el.dataset.timerId) {
+                    clearTimeout(Number(el.dataset.timerId));
+                }
+                el.classList.add("removing");
+                setTimeout(() => el.remove(), 250);
+            }
+
+            function showFlash(type, text, duration = 4000) {
+                const flashEl = document.createElement("div");
+                flashEl.className = "flash-message " + type;
+                flashEl.innerHTML = `
+                    <div class="flash-icon">${iconMap[type]}</div>
+                    <div class="flash-content">
+                        <div class="flash-title">${titleMap[type]}</div>
+                        <div class="flash-description">${text}</div>
+                    </div>
+                    <button type="button" class="flash-close" aria-label="Close notification">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="flash-progress" style="animation-duration:${duration}ms"></div>
+                `;
+
+                const closeBtn = flashEl.querySelector(".flash-close");
+                closeBtn.addEventListener("click", () => removeFlash(flashEl));
+
+                const progressEl = flashEl.querySelector(".flash-progress");
+                let remaining = duration;
+                let startedAt = Date.now();
+                let timerId = window.setTimeout(() => removeFlash(flashEl), remaining);
+                flashEl.dataset.timerId = String(timerId);
+
+                flashEl.addEventListener("mouseenter", () => {
+                    clearTimeout(timerId);
+                    remaining -= Date.now() - startedAt;
+                    if (remaining < 0) {
+                        remaining = 0;
+                    }
+                    if (progressEl) {
+                        progressEl.style.animationPlayState = "paused";
+                    }
+                });
+
+                flashEl.addEventListener("mouseleave", () => {
+                    if (remaining <= 0) {
+                        removeFlash(flashEl);
+                        return;
+                    }
+                    startedAt = Date.now();
+                    timerId = window.setTimeout(() => removeFlash(flashEl), remaining);
+                    flashEl.dataset.timerId = String(timerId);
+                    if (progressEl) {
+                        progressEl.style.animationPlayState = "running";
+                    }
+                });
+
+                container.appendChild(flashEl);
+            }
+
+            flashData.forEach(item => showFlash(item.type, String(item.text)));
+        })();
+    </script>
+</th:block>
+</html>

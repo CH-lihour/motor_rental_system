@@ -19,16 +19,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // One-to-One relationship with Employee
-    @OneToOne
-    @JoinColumn(name = "employee_id", nullable = false, unique = true)
-    private Employee employee;
-
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     @Column(nullable = false, length = 255)
     private String password;
+
+    @Column(length = 100, unique = true)
+    private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
