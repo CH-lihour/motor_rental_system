@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/sidebar :: layout(~{::section}, 'Update Employee')}">
+    <section>
+        <div class="page-header">
+            <h3 class="page-title">Update Employee</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/employees">Employee</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Update Employee</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Update Employee</h4>
+                    <p class="card-description">Update employee </p>
+
+                    <form class="forms-sample" th:action="@{/employees/edit/{id}(id=${emp.id})}" method="post">
+                        <div class="form-group">
+                            <label for="employee_code">Employee Code</label>
+                            <input type="text" name="employee_code" class="form-control" id="employee_code" required th:value="${emp.employeeCode}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" name="fullname" class="form-control" id="fullname" placeholder="Full Name" required th:value="${emp.fullName}">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="number" name="phone" class="form-control" id="phone" placeholder="Phone" required th:value="${emp.phone}">
+                        </div>
+                        <div class="form-group">
+                            <label for="position">Position</label>
+                            <select class="form-select" style="width: 200px;" name="position" id="position" required>
+                                <option value="" style="text-align: center;" class="form-control">-- Select Position --</option>
+                                <option value="MANAGER" class="form-control" th:selected="${emp.position != null and emp.position.name() == 'MANAGER'}">Manager</option>
+                                <option value="STAFF" class="form-control" th:selected="${emp.position != null and emp.position.name() == 'STAFF'}">Staff</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="active" class="form-check-input" id="active" th:checked="${emp.status != null and emp.status.name() == 'ACTIVE'}">
+                            <label class="form-check-label" for="active">Active</label>
+                        </div>
+                        <button type="submit" class="btn btn-gradient-primary me-2">Update</button>
+                        <a href="/employees" class="btn btn-light">Cancel</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </section>
+</html>
+

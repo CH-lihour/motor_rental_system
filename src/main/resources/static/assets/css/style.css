@@ -25191,9 +25191,9 @@ dl li {
   display: none;
 }
 .navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini img {
-  width: calc(70px - 50px);
+  width: calc(85px - 50px);
   max-width: 100%;
-  height: 28px;
+  height: 30px;
   margin: auto;
 }
 .navbar .navbar-menu-wrapper {

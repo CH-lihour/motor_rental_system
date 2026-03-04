@@ -22,6 +22,7 @@
                     <table class="table">
                       <thead>
                         <tr>
+                          <th>No</th>
                           <th>Profile</th>
                           <th>Username</th>
                           <th>Role</th>
@@ -31,29 +32,30 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr th:each="u : ${users}">
-                            <td>
-                                <img th:if="${u.image != null and !#strings.isEmpty(u.image)}"
-                                     th:src="@{${u.image}}"
-                                     alt="profile"
-                                     style="width:50px;height:50px;object-fit:cover;border-radius:50%;">
-                            </td>
-                            <td th:text="${u.username}"></td>
-                            <td th:text="${u.role}"></td>
-                            <td th:text="${u.createdAt != null ? #temporals.format(u.createdAt, 'dd MMM yyyy HH:mm') : ''}"></td>
-                            <td>
-                                <label class="badge"
-                                    th:classappend="${u.active ? ' badge-success' : ' badge-danger'}"
-                                    th:text="${u.active ? 'Active' : 'Inactive'}"></label>
-                            </td>
-                            <td>
-                              <a th:href="@{/users/edit/{id}(id=${u.id})}" class="btn btn-gradient-warning btn-xs"><i class="mdi mdi-pencil"></i></a>
-                              <a th:href="@{/users/delete/{id}(id=${u.id})}" class="btn btn-gradient-danger btn-xs" onclick="return confirm('Are you sure you want to delete this user?');"><i class="mdi mdi-delete"></i></a>
-                            </td>
+                        <tr th:each="u, stat : ${users}">
+                          <td th:text="${stat.count}"></td>
+                          <td>
+                              <img th:if="${u.image != null and !#strings.isEmpty(u.image)}"
+                                    th:src="@{${u.image}}"
+                                    alt="profile"
+                                    style="width:50px;height:50px;object-fit:cover;border-radius:50%;">
+                          </td>
+                          <td th:text="${u.username}"></td>
+                          <td th:text="${u.role}"></td>
+                          <td th:text="${u.createdAt != null ? #temporals.format(u.createdAt, 'dd MMM yyyy HH:mm') : ''}"></td>
+                          <td>
+                              <label class="badge"
+                                  th:classappend="${u.active ? ' badge-success' : ' badge-danger'}"
+                                  th:text="${u.active ? 'Active' : 'Inactive'}"></label>
+                          </td>
+                          <td>
+                            <a th:href="@{/users/edit/{id}(id=${u.id})}" class="btn btn-gradient-warning btn-xs"><i class="mdi mdi-pencil"></i></a>
+                            <a th:href="@{/users/delete/{id}(id=${u.id})}" class="btn btn-gradient-danger btn-xs" onclick="return confirm('Are you sure you want to delete this user?');"><i class="mdi mdi-delete"></i></a>
+                          </td>
                         </tr>
 
                         <tr th:if="${#lists.isEmpty(users)}">
-                            <td colspan="5" class="text-center">No users found.</td>
+                            <td colspan="7" class="text-center">No users found.</td>
                         </tr>
                       </tbody>
                     </table>

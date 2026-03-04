@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/sidebar :: layout(~{::section}, 'Add New Employee')}">
+    <section>
+        <div class="page-header">
+            <h3 class="page-title">Add Employee</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/employees">Employee</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add Employee</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Create New Employee</h4>
+                    <p class="card-description">New employee </p>
+
+                    <form class="forms-sample" th:action="@{/employees/add}" method="post">
+                        <div class="form-group">
+                            <label for="employee_code">Employee Code</label>
+                            <input type="text" name="employee_code" class="form-control" id="employee_code" required th:value="${formEmployeeCode}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" name="fullname" class="form-control" id="fullname" placeholder="Full Name" required th:value="${formFullName}">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" name="phone" class="form-control" id="phone" placeholder="Phone" required th:value="${formPhone}">
+                        </div>
+                        <div class="form-group">
+                            <label for="position">Position</label>
+                            <select class="form-select" style="width: 200px;" name="position" id="position" required>
+                                <option value="" style="text-align: center;" class="form-control">-- Select Position --</option>
+                                <option value="MANAGER" class="form-control" th:selected="${formPosition != null and formPosition.name() == 'MANAGER'}">Manager</option>
+                                <option value="STAFF" class="form-control" th:selected="${formPosition != null and formPosition.name() == 'STAFF'}">Staff</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="active" class="form-check-input" id="active" th:checked="${formActive}">
+                            <label class="form-check-label" for="active">Active</label>
+                        </div>
+                        <button type="submit" class="btn btn-gradient-primary me-2">Add</button>
+                        <a href="/employees" class="btn btn-light">Cancel</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+        <!-- <script>
+            window.addEventListener('load', function () {
+                if (!window.jQuery) {
+                    console.error('jQuery is not loaded');
+                    return;
+                }
+
+                $(document).on('click', '.file-upload-browse', function () {
+                    $('#imageInput').trigger('click');
+                });
+
+                $(document).on('change', '#imageInput', function () {
+                    const file = this.files && this.files[0];
+                if (!file) return;
+
+                $('#imageName').val(file.name);
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imagePreview').attr('src', e.target.result).show();
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        </script> -->
+    </section>
+</html>
+
