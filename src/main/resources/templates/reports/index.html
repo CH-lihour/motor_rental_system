@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/sidebar :: layout(~{::section}, 'Reports')}">
+  <section>
+    <div class="page-header">
+      <h3 class="page-title">Reports</h3>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/reports">Reports</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Overview</li>
+        </ol>
+      </nav>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 stretch-card grid-margin">
+        <div class="card bg-gradient-primary text-white">
+          <div class="card-body">
+            <h4 class="card-title text-white">Total Booking Value</h4>
+            <h2 th:text="${'$ ' + totalBookingValue}">$ 0.00</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 stretch-card grid-margin">
+        <div class="card bg-gradient-success text-white">
+          <div class="card-body">
+            <h4 class="card-title text-white">Total Paid</h4>
+            <h2 th:text="${'$ ' + totalPaid}">$ 0.00</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 stretch-card grid-margin">
+        <div class="card bg-gradient-danger text-white">
+          <div class="card-body">
+            <h4 class="card-title text-white">Outstanding</h4>
+            <h2 th:text="${'$ ' + outstanding}">$ 0.00</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Customers</h5>
+            <h3 th:text="${totalCustomers}">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Bookings</h5>
+            <h3 th:text="${totalBookings}">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Active Bookings</h5>
+            <h3 th:text="${activeBookings}">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Completed</h5>
+            <h3 th:text="${completedBookings}">0</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title" th:text="${'Monthly Bookings - ' + currentYear}">Monthly Bookings</h4>
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="m : ${monthlyRows}">
+                  <td th:text="${m.month}">Jan</td>
+                  <td th:text="${m.count}">0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Booking Financial Report</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Booking</th>
+                    <th>Customer</th>
+                    <th>Plate</th>
+                    <th>Total</th>
+                    <th>Paid</th>
+                    <th>Balance</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="r : ${bookingRows}">
+                    <td th:text="${'#' + r.bookingId}">#1</td>
+                    <td th:text="${r.customerName}">Customer</td>
+                    <td th:text="${r.plateNumber}">Plate</td>
+                    <td th:text="${r.totalPrice}">0.00</td>
+                    <td th:text="${r.paidAmount}">0.00</td>
+                    <td th:text="${r.balance}">0.00</td>
+                    <td th:text="${r.status}">ACTIVE</td>
+                    <td th:text="${r.createdAt != null ? #temporals.format(r.createdAt, 'dd MMM yyyy HH:mm') : ''}">-</td>
+                  </tr>
+                  <tr th:if="${#lists.isEmpty(bookingRows)}">
+                    <td colspan="8" class="text-center">No data available.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</html>

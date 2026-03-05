@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/sidebar :: layout(~{::section}, 'Update Return')}">
+    <section>
+        <div class="page-header">
+            <h3 class="page-title">Update Return</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/returns">Return</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Update Return</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Update Return</h4>
+                        <p class="card-description">Update return</p>
+
+                        <form class="forms-sample" th:action="@{/returns/edit/{id}(id=${returnRecord.id})}" method="post">
+                            <div class="form-group">
+                                <label for="booking_id">Booking</label>
+                                <select class="form-select" name="booking_id" id="booking_id" required>
+                                    <option th:each="b : ${bookings}" th:value="${b.id}" th:text="${'Booking #' + b.id + ' - ' + (b.customer != null ? b.customer.name : '')}" th:selected="${returnRecord.booking != null and returnRecord.booking.id == b.id}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="handled_by">Handled By</label>
+                                <select class="form-select" name="handled_by" id="handled_by" required>
+                                    <option th:each="e : ${employees}" th:value="${e.id}" th:text="${e.fullName}" th:selected="${returnRecord.handledBy != null and returnRecord.handledBy.id == e.id}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="return_time">Return Time</label>
+                                <input type="datetime-local" name="return_time" class="form-control" id="return_time" required th:value="${returnRecord.returnTime != null ? #temporals.format(returnRecord.returnTime, 'yyyy-MM-dd''T''HH:mm') : ''}">
+                            </div>
+                            <div class="form-group">
+                                <label for="late_fee">Late Fee</label>
+                                <input type="number" step="0.01" name="late_fee" class="form-control" id="late_fee" th:value="${returnRecord.lateFee}">
+                            </div>
+                            <div class="form-group">
+                                <label for="damage_fee">Damage Fee</label>
+                                <input type="number" step="0.01" name="damage_fee" class="form-control" id="damage_fee" th:value="${returnRecord.damageFee}">
+                            </div>
+                            <div class="form-group">
+                                <label for="note">Note</label>
+                                <textarea name="note" id="note" class="form-control" th:text="${returnRecord.note}"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-gradient-primary me-2">Update</button>
+                            <a href="/returns" class="btn btn-light">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</html>

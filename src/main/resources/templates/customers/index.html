@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/sidebar :: layout(~{::section}, 'Customer List')}">
+    <section>
+        <div class="page-header">
+            <h3 class="page-title">List Customer</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/customers">Customer</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">List Customer</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div style="display: flex; justify-content: space-between;">
+                      <h4 class="card-title">Customer Table List</h4>
+                      <a href="/customers/add" class="btn btn-gradient-primary btn-fw"><i class="mdi mdi-plus-thick"></i>Add Customer</a>
+                    </div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Name</th>
+                          <th>ID Number</th>
+                          <th>Phone Number</th>
+                          <th>Status</th>
+                          <th>Created At</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr th:each="c, stat : ${customers}">
+                          <td th:text="${stat.count}"></td>
+                          <td th:text="${c.name}"></td>
+                          <td th:text="${c.idNumber}"></td>
+                          <td th:text="${c.phone}"></td>
+                          <td>
+                              <label class="badge"
+                                  th:classappend="${c.blacklisted ? ' badge-danger' : ' badge-success'}"
+                                  th:text="${c.blacklisted ? 'Blacklisted' : 'Not Blacklisted'}"></label>
+                          </td>
+                          <td th:text="${c.createdAt != null ? #temporals.format(c.createdAt, 'dd MMM yyyy HH:mm') : ''}"></td>
+                          <td>
+                            <a th:href="@{/customers/edit/{id}(id=${c.id})}" class="btn btn-gradient-warning btn-xs"><i class="mdi mdi-pencil"></i></a>
+                            <a th:href="@{/customers/delete/{id}(id=${c.id})}" class="btn btn-gradient-danger btn-xs" onclick="return confirm('Are you sure you want to delete this customer?');"><i class="mdi mdi-delete"></i></a>
+                          </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(customers)}">
+                            <td colspan="7" class="text-center">No customers found.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </section>
+</html>

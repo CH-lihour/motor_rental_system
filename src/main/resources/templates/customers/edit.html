@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/sidebar :: layout(~{::section}, 'Update Customer')}">
+    <section>
+        <div class="page-header">
+            <h3 class="page-title">Update Customer</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/customers">Customer</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Update Customer</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Update Customer</h4>
+                    <p class="card-description">Update customer</p>
+
+                    <form class="forms-sample" th:action="@{/customers/edit/{id}(id=${customer.id})}" method="post">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Name" required th:value="${customer.name}">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_number">Identity Number</label>
+                            <input type="text" name="id_number" class="form-control" id="id_number" placeholder="Identity Number" th:value="${customer.idNumber}">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" name="phone" class="form-control" id="phone" placeholder="Phone" required th:value="${customer.phone}">
+                        </div>
+                        <div class="form-group">
+                            <label for="note">Note</label>
+                            <textarea name="note" id="note" class="form-control" th:text="${customer.note}"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-gradient-primary me-2">Update</button>
+                        <a href="/customers" class="btn btn-light">Cancel</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </section>
+</html>

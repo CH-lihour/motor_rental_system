@@ -48,6 +48,11 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
             </form>
           </div> -->
           <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item d-none d-lg-block full-screen-link">
+              <a class="nav-link">
+                <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
+              </a>
+            </li>
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
@@ -71,11 +76,6 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
                   </form>
               </div>
 
-            </li>
-            <li class="nav-item d-none d-lg-block full-screen-link">
-              <a class="nav-link">
-                <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
-              </a>
             </li>
             <!-- <li class="nav-item dropdown">
               <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
@@ -203,36 +203,120 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
                 <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/">
+            <li class="nav-item" th:classappend="${currentUri == '/' ? ' active' : ''}">
+              <a class="nav-link" href="/" th:classappend="${currentUri == '/' ? ' active' : ''}">
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#user-menu" aria-expanded="false" aria-controls="user-menu">
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+              <a class="nav-link" data-bs-toggle="collapse" href="#user-menu" th:classappend="${#strings.startsWith(currentUri, '/users') ? ' active' : ''}" th:attr="aria-expanded=${#strings.startsWith(currentUri, '/users')}" aria-controls="user-menu">
                 <span class="menu-title">User</span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-account-circle menu-icon"></i>
               </a>
-              <div class="collapse" id="user-menu">
+              <div class="collapse" id="user-menu" th:classappend="${#strings.startsWith(currentUri, '/users') ? ' show' : ''}">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link" href="/users">List User</a>
+                    <a class="nav-link" href="/users" th:classappend="${#strings.startsWith(currentUri, '/users') ? ' active' : ''}">List User</a>
                   </li>
                 </ul>
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#employee-menu" aria-expanded="false" aria-controls="employee-menu">
+              <a class="nav-link" data-bs-toggle="collapse" href="#employee-menu" th:classappend="${#strings.startsWith(currentUri, '/employees') ? ' active' : ''}" th:attr="aria-expanded=${#strings.startsWith(currentUri, '/employees')}" aria-controls="employee-menu">
                 <span class="menu-title">Employee</span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-account-tie menu-icon"></i>
               </a>
-              <div class="collapse" id="employee-menu">
+              <div class="collapse" id="employee-menu" th:classappend="${#strings.startsWith(currentUri, '/employees') ? ' show' : ''}">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link" href="/employees">List Employee</a>
+                    <a class="nav-link" href="/employees" th:classappend="${#strings.startsWith(currentUri, '/employees') ? ' active' : ''}">List Employee</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#customer-menu" th:classappend="${#strings.startsWith(currentUri, '/customers') ? ' active' : ''}" th:attr="aria-expanded=${#strings.startsWith(currentUri, '/customers')}" aria-controls="customer-menu">
+                <span class="menu-title">Customer</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-door-open menu-icon"></i>
+              </a>
+              <div class="collapse" id="customer-menu" th:classappend="${#strings.startsWith(currentUri, '/customers') ? ' show' : ''}">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/customers" th:classappend="${#strings.startsWith(currentUri, '/customers') ? ' active' : ''}">List Customer</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#motorcycle-menu" th:classappend="${#strings.startsWith(currentUri, '/motorcycles') ? ' active' : ''}" th:attr="aria-expanded=${#strings.startsWith(currentUri, '/motorcycles')}" aria-controls="motorcycle-menu">
+                <span class="menu-title">Motorcycle</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-motorbike menu-icon"></i>
+              </a>
+              <div class="collapse" id="motorcycle-menu" th:classappend="${#strings.startsWith(currentUri, '/motorcycles') ? ' show' : ''}">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/motorcycles" th:classappend="${#strings.startsWith(currentUri, '/motorcycles') ? ' active' : ''}">List Motorcycle</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#booking-menu" th:classappend="${#strings.startsWith(currentUri, '/bookings') ? ' active' : ''}" th:attr="aria-expanded=${#strings.startsWith(currentUri, '/bookings')}" aria-controls="booking-menu">
+                <span class="menu-title">Booking</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-calendar-clock menu-icon"></i>
+              </a>
+              <div class="collapse" id="booking-menu" th:classappend="${#strings.startsWith(currentUri, '/bookings') ? ' show' : ''}">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/bookings" th:classappend="${#strings.startsWith(currentUri, '/bookings') ? ' active' : ''}">List Booking</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#payment-menu" th:classappend="${#strings.startsWith(currentUri, '/payments') ? ' active' : ''}" th:attr="aria-expanded=${#strings.startsWith(currentUri, '/payments')}" aria-controls="payment-menu">
+                <span class="menu-title">Payment</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-cash-multiple menu-icon"></i>
+              </a>
+              <div class="collapse" id="payment-menu" th:classappend="${#strings.startsWith(currentUri, '/payments') ? ' show' : ''}">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/payments" th:classappend="${#strings.startsWith(currentUri, '/payments') ? ' active' : ''}">List Payment</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#return-menu" th:classappend="${#strings.startsWith(currentUri, '/returns') ? ' active' : ''}" th:attr="aria-expanded=${#strings.startsWith(currentUri, '/returns')}" aria-controls="return-menu">
+                <span class="menu-title">Return</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-keyboard-return menu-icon"></i>
+              </a>
+              <div class="collapse" id="return-menu" th:classappend="${#strings.startsWith(currentUri, '/returns') ? ' show' : ''}">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/returns" th:classappend="${#strings.startsWith(currentUri, '/returns') ? ' active' : ''}">List Return</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#report-menu" th:classappend="${#strings.startsWith(currentUri, '/reports') ? ' active' : ''}" th:attr="aria-expanded=${#strings.startsWith(currentUri, '/reports')}" aria-controls="report-menu">
+                <span class="menu-title">Report</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-file-chart menu-icon"></i>
+              </a>
+              <div class="collapse" id="report-menu" th:classappend="${#strings.startsWith(currentUri, '/reports') ? ' show' : ''}">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/reports" th:classappend="${#strings.startsWith(currentUri, '/reports') ? ' active' : ''}">Summary Report</a>
                   </li>
                 </ul>
               </div>

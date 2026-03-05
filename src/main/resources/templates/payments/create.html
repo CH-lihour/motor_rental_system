@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/sidebar :: layout(~{::section}, 'Add New Payment')}">
+    <section>
+        <div class="page-header">
+            <h3 class="page-title">Add Payment</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/payments">Payment</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add Payment</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Create New Payment</h4>
+                        <p class="card-description">New payment</p>
+
+                        <form class="forms-sample" th:action="@{/payments/add}" method="post">
+                            <div class="form-group">
+                                <label for="booking_id">Booking</label>
+                                <select class="form-select" name="booking_id" id="booking_id" required>
+                                    <option value="">-- Select Booking --</option>
+                                    <option th:each="b : ${bookings}" th:value="${b.id}" th:text="${'Booking #' + b.id + ' - ' + (b.customer != null ? b.customer.name : '')}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="amount">Amount</label>
+                                <input type="number" step="0.01" name="amount" class="form-control" id="amount" placeholder="Amount" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="payment_type">Payment Type</label>
+                                <select class="form-select" name="payment_type" id="payment_type" required>
+                                    <option th:each="t : ${types}" th:value="${t.name()}" th:text="${t.name()}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="method">Method</label>
+                                <select class="form-select" name="method" id="method" required>
+                                    <option th:each="m : ${methods}" th:value="${m.name()}" th:text="${m.name()}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-select" name="status" id="status" required>
+                                    <option th:each="s : ${statuses}" th:value="${s.name()}" th:text="${s.name()}" th:selected="${s.name() == 'PAID'}"></option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-gradient-primary me-2">Add</button>
+                            <a href="/payments" class="btn btn-light">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</html>
